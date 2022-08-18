@@ -25,7 +25,7 @@ export default function Header(props: HeaderProps) {
 
   return (
     <React.Fragment>
-      <AppBar color="primary" position="sticky" elevation={0}>
+      <AppBar  sx={{backgroundColor:'#081627'}} position="sticky" elevation={0}>
         <Toolbar>
           <Grid container spacing={1} alignItems="center">
             <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
@@ -40,7 +40,7 @@ export default function Header(props: HeaderProps) {
             </Grid>
             <Grid item xs />
             <Grid item>
-              <Link
+              {/* <Link
                 href="/"
                 variant="body2"
                 sx={{
@@ -54,7 +54,7 @@ export default function Header(props: HeaderProps) {
                 target="_blank"
               >
                 Go to docs
-              </Link>
+              </Link> */}
             </Grid>
             <Grid item>
               <Tooltip title="Alerts • No alerts">
@@ -78,22 +78,22 @@ export default function Header(props: HeaderProps) {
         elevation={0}
         sx={{ zIndex: 0 }}
       >
-        <Toolbar>
+        <Toolbar sx={{backgroundColor:'#081627'}}>
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
               <Typography color="inherit" variant="h5" component="h1">
-                Authentication
+                Create your order
               </Typography>
             </Grid>
             <Grid item>
-              <Button
+              {/* <Button
                 sx={{ borderColor: lightColor }}
                 variant="outlined"
                 color="inherit"
                 size="small"
               >
                 Web setup
-              </Button>
+              </Button> */}
             </Grid>
             <Grid item>
               <Tooltip title="Help">
@@ -105,14 +105,14 @@ export default function Header(props: HeaderProps) {
           </Grid>
         </Toolbar>
       </AppBar>
-      <AppBar component="div" position="static" elevation={0} sx={{ zIndex: 0 }}>
+      {/* <AppBar component="div" position="static" elevation={0} sx={{ zIndex: 0, backgroundColor:'#081627'}}>
         <Tabs value={0} textColor="inherit">
           <Tab label="Users" />
           <Tab label="Sign-in method" />
           <Tab label="Templates" />
-          <Tab label="Usage" />
-        </Tabs>
-      </AppBar>
+          {/* <Tab label="Usage" /> */}
+        {/* </Tabs> */}
+      {/* </AppBar> */} 
     </React.Fragment>
   );
 }
