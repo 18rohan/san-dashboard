@@ -5,7 +5,8 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Box from "@mui/material/Box";
-// import Check from '@mui/icons-material/Check';
+
+// Import Icons and UI Components
 import SettingsIcon from "@mui/icons-material/Settings";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import VideoLabelIcon from "@mui/icons-material/VideoLabel";
@@ -14,6 +15,8 @@ import StepConnector, {
 } from "@mui/material/StepConnector";
 import { StepIconProps } from "@mui/material/StepIcon";
 import Button from "@mui/material/Button";
+
+
 
 // Components
 import CreateOrderForm from "../CreateOrderForm";
@@ -105,6 +108,16 @@ export default function CustomizedSteppers() {
       setCurrentStep((prevState) => prevState - 1);
     } else return;
   }
+  const renderStepContent = (currentStep: number) => {
+    switch (currentStep) {
+      case 0:
+        return <CreateOrderForm />;
+      case 1:
+        return <LogisticsForm />;
+      case 2:
+        return <CreateOrderForm />;
+    }
+  };
   console.log("CurrentStep: ", currentStep);
 
   return (
@@ -125,15 +138,8 @@ export default function CustomizedSteppers() {
         </Stepper>
       </Stack>
       {/* Switching between different steps of the form */}
-      {currentStep === 0 ? (
-        <CreateOrderForm />
-      ) : currentStep === 1 ? (
-        <LogisticsForm />
-      ) : currentStep === 2 ? (
-        <CreateOrderForm />
-      ) : (
-        <div>Hello World </div>
-      )}
+              {renderStepContent(currentStep)}
+      
 
       <Box
         width="100%"
@@ -143,7 +149,7 @@ export default function CustomizedSteppers() {
       >
         {currentStep > 0 && (
           <Button
-            sx={{ width: "100px", marginX:'12px' }}
+            sx={{ width: "100px", marginX: "12px" }}
             variant="contained"
             color="error"
             onClick={() => {

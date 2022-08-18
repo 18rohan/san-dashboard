@@ -1,7 +1,7 @@
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import Paper from "@mui/material/Paper";
 import "./App.css";
-// import Box from '@mui/material/Box'
+import { GetAllUsers } from "./services/firebaseService";
 
 // Containers
 // import Theme from "./containers/Theme";
@@ -10,6 +10,9 @@ import Routes from "./containers/Routes";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen";
 
 function App() {
+  useEffect(()=>{
+    GetAllUsers();
+  },[])
   return (
     <Paper elevation={0}>
       <Suspense fallback={<LoadingScreen />}>
