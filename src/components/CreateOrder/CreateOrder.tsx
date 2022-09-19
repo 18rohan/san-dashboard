@@ -5,6 +5,9 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Box from "@mui/material/Box";
+import * as yup from 'yup';
+import {useForm} from 'react-hook-form';
+import {yupResolver} from "@hookform/resolvers/yup";
 
 // Import Icons and UI Components
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -21,7 +24,17 @@ import Button from "@mui/material/Button";
 // Components
 import CreateOrderForm from "../CreateOrderForm";
 import LogisticsForm from "../LogisticsForm";
-
+interface formData{
+  OrderWeight:number,
+  MaterialType:string,
+  ProductColor:string,
+  area:string,
+  CompanyName:string,
+  address:string,
+  city:string,
+  state:string,
+  pincode:string,  
+}
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
     top: 22,
@@ -97,13 +110,51 @@ const steps = [
 ];
 
 export default function CustomizedSteppers() {
+  const defaultValues = {
+    OrderWeight:'',
+    MaterialType:'',
+    ProductColor:'',
+    area:'',
+    CompanyName:'',
+    address:'',
+    city:'',
+    state:'',
+    pincode:'',
+  }
+  const validationSchema = [
+      yup.object({
+        OrderWeight:yup.number().required("Required"),
+        materialType:yup.string().required("Required"),
+        productColor:yup.string().required("Required"),
+        area:yup.string().required("Required"),
+      }),
+      yup.object({
+          companyName:yup.string().required("Required"),
+          address:yup.string().required("Required"),
+          city:yup.string().required("Required"),
+          state:yup.string().required("Required"),
+          pincode:yup.string().required("Required"),
+      })
+    ]
   const [currentStep, setCurrentStep] = React.useState<number>(0);
-  function NextStep(currentStep: number) {
-    if (currentStep < 2) {
+  const currentValidationSchema = validationSchema[currentStep];
+   const methods = useForm({
+    shouldUnregister:false,
+    defaultValues,
+    resolver:yupResolver(currentValidationSchema),
+    mode:"onChange"
+
+  })
+
+  const {handleSubmit, trigger} = methods;
+  
+  async function NextStep(currentStep: number) {
+    const isStepValid = await trigger();
+    if ((currentStep < 2) ) {
       setCurrentStep((prevState) => prevState + 1);
     } else return;
   }
-  function PrevStep(currentStep: number) {
+  async function PrevStep(currentStep: number) {
     if (currentStep > 0) {
       setCurrentStep((prevState) => prevState - 1);
     } else return;
@@ -120,6 +171,12 @@ export default function CustomizedSteppers() {
   };
   console.log("CurrentStep: ", currentStep);
 
+ 
+  const onSubmit = (data:any)=>{
+    alert(JSON.stringify(data));
+    NextStep(currentStep);
+    
+  }
   return (
     <>
       <Stack sx={{ width: "100%" }} spacing={4}>
@@ -159,7 +216,14 @@ export default function CustomizedSteppers() {
             Prev
           </Button>
         )}
-        <Button
+        {currentStep === steps.length -1 ?  (<Button
+          sx={{ width: "100px" }}
+          variant="contained"
+          color="info"
+          onClick={handleSubmit(onSubmit)}
+        >
+          Submit
+        </Button>) : (<Button
           sx={{ width: "100px" }}
           variant="contained"
           color="info"
@@ -168,7 +232,7 @@ export default function CustomizedSteppers() {
           }}
         >
           Next
-        </Button>
+        </Button>)}
       </Box>
     </>
   );

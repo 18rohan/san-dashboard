@@ -10,12 +10,12 @@ const UserProfileLanding = lazy(
 );
 const CreateOrderForm = lazy(()=>import("../../components/CreateOrder"))
 export const appRoutes = [
-  // Login (client/Admin)
+  
   {
     path: "/",
     element: <Login />,
   },
-  // Signup (client)
+  
   {
     path: "/signup",
     element: <SignUp />,
@@ -38,14 +38,14 @@ export const appRoutes = [
   }
 ];
 
+
+
+
+
 // Create Order form
-
 // Clients List Table View
-
 // Orders List Table View
-
 // User(Client) dashboard
-
 // User(Admin) dashboard
 
 export default appRoutes;

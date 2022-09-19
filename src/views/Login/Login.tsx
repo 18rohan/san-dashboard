@@ -6,13 +6,16 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
+import {useNavigate} from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../../firebase/firebase-config';
+import {useForm, Controller} from 'react-hook-form';
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -29,15 +32,22 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const navigate = useNavigate();
+  const [error, setError] = React.useState('');
+  const {control, reset, handleSubmit} = useForm();
 
+  const handleSubmission = async(data:any) => {
+    signInWithEmailAndPassword(auth, data.email, data.password)
+    .then((res)=>{
+      navigate('/create-order')
+      sessionStorage.setItem('Auth Token', res.user.refreshToken)
+    })
+    .catch((error)=>error.code === 'auth/wrong-password' ?  setError('Invalid Credentials') : setError(error.code));
+
+    console.log(error);
+  
+  };
+  
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -56,27 +66,31 @@ export default function Login() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
+          <Box  sx={{ mt: 1 }}>
+            <Box mb={3} mt={3}>
+            <Controller control={control} name="email" defaultValue="" render={({field})=>(
+              <TextField
               fullWidth
               id="email"
               label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
+              {...field}
             />
-            <TextField
-              margin="normal"
-              required
+            )}
+            rules={{required:true}}
+            />
+            </Box>
+            <Controller control={control} name="password" defaultValue={""} render={({field})=>(
+              <TextField
               fullWidth
-              name="password"
               label="Password"
               type="password"
               id="password"
-              autoComplete="current-password"
+              {...field}
             />
+            )}
+            rules={{required:true}}
+            />
+            <p style={{color:'red', fontWeight:'500'}}>{error}</p>
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
@@ -86,6 +100,7 @@ export default function Login() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              onClick={handleSubmit(handleSubmission)}
             >
               Sign In
             </Button>

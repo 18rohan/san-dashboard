@@ -4,14 +4,15 @@ import Box from "@mui/material/Box";
 import CustomTextField from "../TextField/CustomTextField";
 import Grid from '@mui/material/Grid'
 import {useForm} from 'react-hook-form';
-
+import InputController from '../InputController/';
 
 
 const CreateOrderForm = () => {
-  const {register, handleSubmit} = useForm();
+  const {register, handleSubmit, reset, control} = useForm();
   const handleRegistration:any = (data:any) =>console.log(data);
   return (
     <Box
+    
       display="flex"
       flexDirection="column"
       justifyContent="center"
@@ -20,28 +21,26 @@ const CreateOrderForm = () => {
       paddingTop="50px"
       paddingBottom="20px"
     >
-      <Box maxWidth={{md:'80%',xs:'100%'}}>
+      <Box maxWidth={{md:'100%',xs:'100%'}}>
       <Grid container spacing={2}>
-        <form onSubmit={handleSubmit(handleRegistration)}>
         <Grid item  xs={12} md={6}>
-        {/* <CustomTextField label="Order type" value="12" id="component" fullWidth  /> */}
-        <input type="text"  {...register('order-type')} />
+          <InputController name="orderWeight" label="Order Weight" variant="outlined"/>
+        {/* <CustomTextField label="Order weight"  value="12" id="component"  fullWidth  /> */}
         </Grid>
         <Grid item xs={12} md={6}>
-        {/* <CustomTextField label="Weight" value="12" id="component" fullWidth EndAdornment="Kg"/> */}
-        <input type="number"  {...register('weight')} />
+          <InputController name="materialType" label="Material Type" variant="outlined"/>
+        {/* <CustomTextField label="Order type"  value="12" id="component"  fullWidth  /> */}
         </Grid>
         <Grid item xs={12} md={12}>
-        {/* <CustomTextField label="Date" value="12" id="component" fullWidth /> */}
-        <input type="text"  {...register('date-register')} />
+        <InputController name="color" label="Color" variant="outlined"/>
+        {/* <CustomTextField label="Color" value="12"  id="component" fullWidth /> */}
         </Grid>
         <Grid item xs={12} md={12}>
-        {/* <CustomTextField label="Components" value="12" id="component" fullWidth /> */}
-        <input type="text"  {...register('color')} />
+        <InputController name="area" label="Area" variant="outlined"/>
+        {/* <CustomTextField label="Area" value="12"  id="component"  fullWidth /> */}
         </Grid>
-        </form>
-      </Grid>
       
+      </Grid>
       
       
       {/* <CustomTextField label="Components" value="12" id="component" fullWidth />

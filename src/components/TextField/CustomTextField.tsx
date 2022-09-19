@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import InputAdornment from "@mui/material/InputAdornment";
+import { Control, Controller, ControllerProps, FieldError, UseFormReturn} from 'react-hook-form';
 
 
 interface Props {
@@ -20,25 +21,46 @@ interface Props {
   StartAdornment?: string;
 }
 
-const CustomTextField: FC<Props> = ({
+export type TextFieldElementProps = {
+  formContext?:UseFormReturn;
+  validation?: ControllerProps["rules"];
+  name?:string;
+  control?:Control<any>;
+  charLimit?:number;
+  fullWidth?:boolean;
+  label:string;
+  onChange?:any;
+  value:string | number | boolean;
+  border?:boolean;
+  variant?:string;
+  id:string;
+  defaultValue?:string | number | boolean;
+  error?:boolean;
+  EndAdornment?:string;
+  StartAdornment?:string;
+
+}
+const CustomTextField: FC<TextFieldElementProps> = ({
+  validation={},
+  name,
+  border,
   label,
   value,
-  border,
+  control,
   variant,
   id,
   defaultValue,
   error,
   charLimit,
-  validation,
   EndAdornment,
   StartAdornment,
-}: Props) => {
-  return (
+}: TextFieldElementProps) => {
+  return ( 
     <Box display="flex" justifyContent="center" alignItems="center">
       <TextField
         fullWidth
         id={id}
-        color="warning"
+       color="warning"
         InputProps={{
           startAdornment: StartAdornment && (
             <InputAdornment position="start">{StartAdornment}</InputAdornment>
