@@ -5,9 +5,9 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Box from "@mui/material/Box";
-import * as yup from 'yup';
-import {useForm} from 'react-hook-form';
-import {yupResolver} from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm, FormProvider } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 // Import Icons and UI Components
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -19,21 +19,21 @@ import StepConnector, {
 import { StepIconProps } from "@mui/material/StepIcon";
 import Button from "@mui/material/Button";
 
-
-
 // Components
 import CreateOrderForm from "../CreateOrderForm";
 import LogisticsForm from "../LogisticsForm";
-interface formData{
-  OrderWeight:number,
-  MaterialType:string,
-  ProductColor:string,
-  area:string,
-  CompanyName:string,
-  address:string,
-  city:string,
-  state:string,
-  pincode:string,  
+import ThankYouComponent from "components/ThankYouComponent";
+import FormSummary from "../FormSummary";
+interface formData {
+  orderWeight: number;
+  MaterialType: string;
+  ProductColor: string;
+  area: string;
+  CompanyName: string;
+  address: string;
+  city: string;
+  state: string;
+  pincode: string;
 }
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -107,50 +107,41 @@ const steps = [
   "Create an order",
   "Finalise the logistics",
   "Finalise the order",
+  "Order Submitted",
 ];
 
 export default function CustomizedSteppers() {
-  const defaultValues = {
-    OrderWeight:'',
-    MaterialType:'',
-    ProductColor:'',
-    area:'',
-    CompanyName:'',
-    address:'',
-    city:'',
-    state:'',
-    pincode:'',
-  }
+  const methods = useForm();
   const validationSchema = [
-      yup.object({
-        OrderWeight:yup.number().required("Required"),
-        materialType:yup.string().required("Required"),
-        productColor:yup.string().required("Required"),
-        area:yup.string().required("Required"),
-      }),
-      yup.object({
-          companyName:yup.string().required("Required"),
-          address:yup.string().required("Required"),
-          city:yup.string().required("Required"),
-          state:yup.string().required("Required"),
-          pincode:yup.string().required("Required"),
-      })
-    ]
+    yup.object({
+      OrderWeight: yup.number().required("Required"),
+      materialType: yup.string().required("Required"),
+      productColor: yup.string().required("Required"),
+      area: yup.string().required("Required"),
+    }),
+    yup.object({
+      companyName: yup.string().required("Required"),
+      address: yup.string().required("Required"),
+      city: yup.string().required("Required"),
+      state: yup.string().required("Required"),
+      pincode: yup.string().required("Required"),
+    }),
+  ];
   const [currentStep, setCurrentStep] = React.useState<number>(0);
   const currentValidationSchema = validationSchema[currentStep];
-   const methods = useForm({
-    shouldUnregister:false,
-    defaultValues,
-    resolver:yupResolver(currentValidationSchema),
-    mode:"onChange"
+  //  const methods = useForm({
+  //   shouldUnregister:false,
+  //   defaultValues,
+  //   resolver:yupResolver(currentValidationSchema),
+  //   mode:"onChange"
 
-  })
+  // })
 
-  const {handleSubmit, trigger} = methods;
-  
+  const { handleSubmit, control } = methods;
+
   async function NextStep(currentStep: number) {
-    const isStepValid = await trigger();
-    if ((currentStep < 2) ) {
+    // const isStepValid = await trigger();
+    if (currentStep <= 2) {
       setCurrentStep((prevState) => prevState + 1);
     } else return;
   }
@@ -166,17 +157,17 @@ export default function CustomizedSteppers() {
       case 1:
         return <LogisticsForm />;
       case 2:
-        return <CreateOrderForm />;
+        return <FormSummary />;
+      case 3:
+        return <ThankYouComponent />;
     }
   };
   console.log("CurrentStep: ", currentStep);
 
- 
-  const onSubmit = (data:any)=>{
+  const onSubmit = (data: any) => {
     alert(JSON.stringify(data));
     NextStep(currentStep);
-    
-  }
+  };
   return (
     <>
       <Stack sx={{ width: "100%" }} spacing={4}>
@@ -195,45 +186,55 @@ export default function CustomizedSteppers() {
         </Stepper>
       </Stack>
       {/* Switching between different steps of the form */}
-              {renderStepContent(currentStep)}
-      
-
-      <Box
-        width="100%"
-        display="flex"
-        justifyContent="space-around"
-        alignItems="center"
-      >
-        {currentStep > 0 && (
-          <Button
-            sx={{ width: "100px", marginX: "12px" }}
-            variant="contained"
-            color="error"
-            onClick={() => {
-              PrevStep(currentStep);
-            }}
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          {renderStepContent(currentStep)}
+          <Box
+            width="100%"
+            display="flex"
+            justifyContent="space-around"
+            alignItems="center"
           >
-            Prev
-          </Button>
-        )}
-        {currentStep === steps.length -1 ?  (<Button
-          sx={{ width: "100px" }}
-          variant="contained"
-          color="info"
-          onClick={handleSubmit(onSubmit)}
-        >
-          Submit
-        </Button>) : (<Button
-          sx={{ width: "100px" }}
-          variant="contained"
-          color="info"
-          onClick={() => {
-            NextStep(currentStep);
-          }}
-        >
-          Next
-        </Button>)}
-      </Box>
+            {currentStep > 0 && (
+              <Button
+                sx={{ width: "100px", marginX: "12px" }}
+                variant="contained"
+                color="error"
+                onClick={() => {
+                  PrevStep(currentStep);
+                }}
+              >
+                Prev
+              </Button>
+            )}
+            {currentStep === steps.length - 1 && (
+              <Button
+                sx={{ width: "100px" }}
+                variant="contained"
+                color="info"
+                type="submit"
+                onClick={() => {
+                  handleSubmit(onSubmit);
+                }}
+              >
+                Submit
+              </Button>
+            )}
+            {currentStep < steps.length - 1 && (
+              <Button
+                sx={{ width: "100px" }}
+                variant="contained"
+                color="info"
+                onClick={() => {
+                  NextStep(currentStep);
+                }}
+              >
+                Next
+              </Button>
+            )}
+          </Box>
+        </form>
+      </FormProvider>
     </>
   );
 }
