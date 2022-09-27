@@ -138,6 +138,7 @@ export default function CustomizedSteppers() {
   // })
 
   const { handleSubmit, control } = methods;
+  console.log("@home: ",methods.formState)
 
   async function NextStep(currentStep: number) {
     // const isStepValid = await trigger();
@@ -195,7 +196,8 @@ export default function CustomizedSteppers() {
             justifyContent="space-around"
             alignItems="center"
           >
-            {currentStep > 0 && (
+            {/* 'Prev' button to appear on the: first and the second views of the form */}
+            {((currentStep > 0) && (currentStep !== steps.length - 1)) && (
               <Button
                 sx={{ width: "100px", marginX: "12px" }}
                 variant="contained"
@@ -207,8 +209,9 @@ export default function CustomizedSteppers() {
                 Prev
               </Button>
             )}
-            {currentStep === steps.length - 1 && (
-              <Button
+            {/* 'Submit' button to appear on second view*/}
+            {currentStep === steps.length - 2 && (
+              <Button 
                 sx={{ width: "100px" }}
                 variant="contained"
                 color="info"
@@ -220,7 +223,7 @@ export default function CustomizedSteppers() {
                 Submit
               </Button>
             )}
-            {currentStep < steps.length - 1 && (
+            {currentStep < steps.length - 2 && (
               <Button
                 sx={{ width: "100px" }}
                 variant="contained"
