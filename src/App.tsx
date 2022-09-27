@@ -11,6 +11,7 @@ const Login = lazy(() => import("./views/Login"));
 const SignUp = lazy(() => import("./views/Signup"));
 const CreateOrder = lazy(() => import("./views/PaperBase"));
 const CreateOrderForm = lazy(() => import("./components/CreateOrder"));
+const OrdersList = lazy(()=> import("./components/Orders"));
 
 function App() {
   useEffect(() => {
@@ -22,7 +23,17 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          
+          <Route
+            path="/order-list"
+            element={
+              <AuthRoute>
+                <CreateOrder>
+                  <OrdersList />
+                  </CreateOrder>
+              </AuthRoute>
+            }
+          />
+        
           <Route
             path="/create-order"
             element={

@@ -11,6 +11,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import DnsRoundedIcon from '@mui/icons-material/DnsRounded';
 import PermMediaOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActual';
+import {NavLink} from 'react-router-dom';
 // import PublicIcon from '@mui/icons-material/Public';
 // import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet';
 // import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent';
@@ -23,11 +24,12 @@ const categories = [
     id: 'Jobs',
     children: [
       {
-        id: 'Clients',
+        id: 'create orders',
         icon: <PeopleIcon />,
         active: true,
+        link:'/create-order'
       },
-      { id: 'Orders', icon: <DnsRoundedIcon /> },
+      { id: 'Orders List', icon: <DnsRoundedIcon /> ,link:'/order-list'},
       { id: 'Invoices', icon: <PermMediaOutlinedIcon /> },
     //   { id: 'Hosting', icon: <PublicIcon /> },
     //   { id: 'Functions', icon: <SettingsEthernetIcon /> },
@@ -40,9 +42,9 @@ const categories = [
   {
     id: 'Quality',
     children: [
-      { id: 'Analytics', icon: <SettingsIcon /> },
-      { id: 'Performance', icon: <TimerIcon /> },
-      { id: 'Test Lab', icon: <PhonelinkSetupIcon /> },
+      { id: 'Analytics', icon: <SettingsIcon />,link:'analytics' },
+      { id: 'Performance', icon: <TimerIcon />,link:'performance'},
+      { id: 'Test Lab', icon: <PhonelinkSetupIcon /> ,link:'test-lab'},
     ],
   },
 ];
@@ -69,7 +71,7 @@ export default function Navigator(props: DrawerProps) {
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
         <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
-          San Group
+          {/* San Group */}
         </ListItem>
         <ListItem sx={{ ...item, ...itemCategory }}>
           <ListItemIcon>
@@ -77,18 +79,22 @@ export default function Navigator(props: DrawerProps) {
           </ListItemIcon>
           <ListItemText>Project Overview</ListItemText>
         </ListItem>
-        {categories.map(({ id, children }) => (
+        {categories.map(({ id,children }) => (
           <Box key={id} sx={{ bgcolor: '#101F33' }}>
+            
             <ListItem sx={{ py: 2, px: 3 }}>
               <ListItemText sx={{ color: '#fff' }}>{id}</ListItemText>
             </ListItem>
-            {children.map(({ id: childId, icon, active }) => (
+            
+            {children.map(({ id: childId, icon, active, link }) => (
+              <NavLink key={childId} to={link ? link : '/'} style={{textDecoration:'none'}}>
               <ListItem disablePadding key={childId}>
                 <ListItemButton selected={active} sx={item}>
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText>{childId}</ListItemText>
                 </ListItemButton>
               </ListItem>
+              </NavLink>
             ))}
             <Divider sx={{ mt: 2 }} />
           </Box>

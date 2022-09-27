@@ -7,7 +7,10 @@ import StepLabel from "@mui/material/StepLabel";
 import Box from "@mui/material/Box";
 import * as yup from "yup";
 import { useForm, FormProvider } from "react-hook-form";
+import {AiOutlineCheckCircle} from 'react-icons/ai';
 import { yupResolver } from "@hookform/resolvers/yup";
+import { db } from "../../firebase/firebase-config";
+import {doc, collection,setDoc, addDoc} from 'firebase/firestore';
 
 // Import Icons and UI Components
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -26,10 +29,10 @@ import ThankYouComponent from "components/ThankYouComponent";
 import FormSummary from "../FormSummary";
 interface formData {
   orderWeight: number;
-  MaterialType: string;
-  ProductColor: string;
+  materialType: string;
+  productColor: string;
   area: string;
-  CompanyName: string;
+  companyName: string;
   address: string;
   city: string;
   state: string;
@@ -91,6 +94,7 @@ function ColorlibStepIcon(props: StepIconProps) {
     1: <SettingsIcon />,
     2: <GroupAddIcon />,
     3: <VideoLabelIcon />,
+    4:<AiOutlineCheckCircle size={27}/>
   };
 
   return (
@@ -138,7 +142,7 @@ export default function CustomizedSteppers() {
   // })
 
   const { handleSubmit, control } = methods;
-  console.log("@home: ",methods.formState)
+  
 
   async function NextStep(currentStep: number) {
     // const isStepValid = await trigger();
@@ -163,9 +167,20 @@ export default function CustomizedSteppers() {
         return <ThankYouComponent />;
     }
   };
-  console.log("CurrentStep: ", currentStep);
+  // console.log("CurrentStep: ", currentStep);
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async(data: any) => {
+    addDoc(collection(db,"orders"),{
+      orderWeight:data.orderWeight,
+      materialType:data.materialType,
+      color:data.color,
+      area:data.area,
+      address:data.address,
+      companyName:data.companyName,
+      city:data.city
+
+    }).then((res)=>console.log(res))
+    .catch((err)=>console.log(err));
     alert(JSON.stringify(data));
     NextStep(currentStep);
   };

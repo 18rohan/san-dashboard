@@ -1,5 +1,5 @@
 import React, { lazy } from "react";
-// import {Outlet} from 'react-router-dom';
+
 
 // components/Views
 import Home from "../../views/PaperBase";

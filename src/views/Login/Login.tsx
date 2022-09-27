@@ -34,6 +34,7 @@ const theme = createTheme();
 export default function Login() {
   const navigate = useNavigate();
   const [error, setError] = React.useState('');
+  console.log("Landed on Login page")
   const {control, reset, handleSubmit} = useForm();
 
   const handleSubmission = async(data:any) => {
