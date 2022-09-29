@@ -2,8 +2,11 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import FormField from "../FormField";
+import { useFormContext } from "react-hook-form";
 
 const CreateOrderForm = () => {
+  const {formState:{errors}} = useFormContext();
+  // console.log("Error Current: ",errors);
   return (
     <Box
       display="flex"
@@ -23,6 +26,9 @@ const CreateOrderForm = () => {
               variant="outlined"
               size="medium"
               fullWidth
+              fieldtype="number"
+              endadornment="Kg"
+              error={!!errors.orderWeight}
             />
           </Grid>
           <Grid item xs={12} md={6}>

@@ -17,8 +17,8 @@ interface Props {
   error?: boolean;
   charLimit?: number;
   validation?: any;
-  EndAdornment?: string;
-  StartAdornment?: string;
+  // EndAdornment?: string;
+  // StartAdornment?: string;
 }
 
 export type TextFieldElementProps = {

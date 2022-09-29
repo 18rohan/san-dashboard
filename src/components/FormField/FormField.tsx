@@ -1,48 +1,53 @@
-import { TextField } from "@mui/material";
-import { Controller, useFormContext, useFormState } from "react-hook-form";
-
-type Formdata = {
+import { InputAdornment, TextField } from "@mui/material";
+import { Controller, useFormState } from "react-hook-form";
+import {useFormContext} from 'react-hook-form';
+type Fielddata = {
   FieldName: string;
   label: string;
   fullWidth:boolean;
   variant:'standard' | 'outlined' | 'filled' | undefined,
   size:'small' | 'medium' | undefined,
-  
-  
+  startadornment?:string,
+  endadornment?:string,
+  fieldtype?:string
+  error?:boolean,
   
 };
-const defaultValue= {
-  orderWeight:'',
-  materialType:'',
-  color:'',
-  area:'',
 
-}
-const FormField = ({ FieldName, label, variant,fullWidth, size, ...restProps }: Formdata) => {
-  
-  const formState = useFormState();
+const FormField = ({ FieldName, label, variant,fullWidth, error,size, ...restProps }: Fielddata) => {
+const {formState:{errors}} = useFormContext();
+
   return (
     <Controller
       name={FieldName}
       defaultValue=""
-      render={({ field:{onChange, onBlur, value ,ref} }) =>(
+      render={({ field:{onChange, onBlur, value ,ref}}) =>(
+        
          <TextField 
          label={label} 
          variant={variant}
          size={size}
          fullWidth={fullWidth}
          onChange={onChange}
-         
+         error={!!error}
+         type={restProps.fieldtype}
+         InputProps={{
+          startAdornment:restProps.startadornment && (<InputAdornment position="start">{restProps.startadornment}</InputAdornment>),
+          endAdornment:restProps.endadornment && (<InputAdornment position="end">{restProps.endadornment}</InputAdornment>)
+         }}
          onBlur={onBlur}
-         ref={ref}
-         error={Boolean(formState.errors.lastName)}
-         helperText={formState.errors.lastName?.message}
+
+         
+        //  helperText={error ? error.message : null}
          value={value}
          {...restProps}
           />
+          
          )} 
-         rules={{required:'Required!'}}
+         rules={{required:'Required Field!'}}
+         
     />
+    
   );
 };
 

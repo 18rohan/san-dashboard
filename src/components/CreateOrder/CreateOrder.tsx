@@ -10,7 +10,8 @@ import { useForm, FormProvider } from "react-hook-form";
 import {AiOutlineCheckCircle} from 'react-icons/ai';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { db } from "../../firebase/firebase-config";
-import {doc, collection,setDoc, addDoc} from 'firebase/firestore';
+import * as Yup from 'yup';
+import {collection, addDoc} from 'firebase/firestore';
 
 // Import Icons and UI Components
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -115,7 +116,6 @@ const steps = [
 ];
 
 export default function CustomizedSteppers() {
-  const methods = useForm();
   const validationSchema = [
     yup.object({
       OrderWeight: yup.number().required("Required"),
@@ -131,8 +131,13 @@ export default function CustomizedSteppers() {
       pincode: yup.string().required("Required"),
     }),
   ];
+  
+  
+  
   const [currentStep, setCurrentStep] = React.useState<number>(0);
-  const currentValidationSchema = validationSchema[currentStep];
+  console.log("Validation Scheme: ",validationSchema);
+  const methods = useForm({resolver:yupResolver(validationSchema[currentStep])});
+  // const currentValidationSchema = validationSchema[currentStep];
   //  const methods = useForm({
   //   shouldUnregister:false,
   //   defaultValues,
@@ -141,7 +146,7 @@ export default function CustomizedSteppers() {
 
   // })
 
-  const { handleSubmit, control } = methods;
+  const { handleSubmit } = methods;
   
 
   async function NextStep(currentStep: number) {

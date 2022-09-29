@@ -1,11 +1,14 @@
 import React from "react";
 import Box from "@mui/material/Box";
+import { useFormContext } from "react-hook-form";
 
 import CustomTextField from "../TextField/CustomTextField";
 import Grid from '@mui/material/Grid'
 import FormField from '../FormField';
 
 const LogisticsForm = () => {
+  const {formState:{errors}} = useFormContext();
+  console.log("Error Current: ",errors);
   return (
     <Box
       display="flex"
@@ -26,7 +29,7 @@ const LogisticsForm = () => {
               label="Company Name"
               variant="outlined"
               size="medium"
-              
+              error={!!errors.FieldName}
               fullWidth
 
             />
@@ -38,7 +41,7 @@ const LogisticsForm = () => {
               label="Address"
               variant="outlined"
               size="medium"
-              
+              error={!!errors.FieldName}
               fullWidth
             />
         {/* <CustomTextField label="Address" value="12" id="component" fullWidth  /> */}
@@ -50,7 +53,7 @@ const LogisticsForm = () => {
               label="City"
               variant="outlined"
               size="medium"
-              
+              error={!!errors.FieldName}              
               fullWidth
             />
         {/* <CustomTextField label="City" value="12" id="component" fullWidth /> */}
