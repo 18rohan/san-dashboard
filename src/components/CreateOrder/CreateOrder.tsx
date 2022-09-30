@@ -11,7 +11,7 @@ import {AiOutlineCheckCircle} from 'react-icons/ai';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { db } from "../../firebase/firebase-config";
 import * as Yup from 'yup';
-import {collection, addDoc} from 'firebase/firestore';
+import { collection, addDoc} from 'firebase/firestore';
 
 // Import Icons and UI Components
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -135,8 +135,8 @@ export default function CustomizedSteppers() {
   
   
   const [currentStep, setCurrentStep] = React.useState<number>(0);
-  console.log("Validation Scheme: ",validationSchema);
-  const methods = useForm({resolver:yupResolver(validationSchema[currentStep])});
+  // console.log("Validation Scheme: ",validationSchema);
+  const methods = useForm();
   // const currentValidationSchema = validationSchema[currentStep];
   //  const methods = useForm({
   //   shouldUnregister:false,

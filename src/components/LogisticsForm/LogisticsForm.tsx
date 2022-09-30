@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 
 import CustomTextField from "../TextField/CustomTextField";
 import Grid from '@mui/material/Grid'
-import FormField from '../FormField';
+import FormField from '../Form/FormField';
 
 const LogisticsForm = () => {
   const {formState:{errors}} = useFormContext();

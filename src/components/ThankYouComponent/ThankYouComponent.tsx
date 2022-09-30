@@ -1,22 +1,9 @@
 import React from "react";
 import Box from "@mui/material/Box";
 
-import CustomTextField from "../TextField/CustomTextField";
-import Grid from "@mui/material/Grid";
-import { useForm } from "react-hook-form";
-// import InputController from '../InputController/';
-import FormField from "../FormField";
-import { TextField } from "@mui/material";
+
 
 const FormSubmitted = () => {
-  const { register, handleSubmit, reset, control } = useForm();
-  const handleRegistration: any = (data: any) => console.log(data);
-  const defaultValues = {
-     orderWeight:'asd',
-    materialType:'',
-    ProductColor:'',
-    area:'',
-  }
   return (
     <Box
       display="flex"

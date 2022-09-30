@@ -1,11 +1,16 @@
 import React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import FormField from "../FormField";
+import FormField from "../Form/FormField";
 import { useFormContext } from "react-hook-form";
-
+import SelectInput from "components/Form/SelectInput";
+import * as RAL from "ral";
 const CreateOrderForm = () => {
-  const {formState:{errors}} = useFormContext();
+  const ColorsData = RAL.RAL;
+  
+  const {
+    formState: { errors },
+  } = useFormContext();
   // console.log("Error Current: ",errors);
   return (
     <Box
@@ -41,13 +46,24 @@ const CreateOrderForm = () => {
             />
           </Grid>
           <Grid item xs={12} md={12}>
-            <FormField
+            <SelectInput
+              data={ColorsData}
+              FieldName="color"
+              Labelid="color"
+              id="color-field"
+              fullWidth
+              startadornment="RAL"
+              label="color"
+              size="medium"
+              HelperText="Select a color"
+            />
+            {/* <FormField
               FieldName="color"
               label="Color"
               variant="outlined"
               size="medium"
               fullWidth
-            />
+            /> */}
           </Grid>
           <Grid item xs={12} md={12}>
             <FormField

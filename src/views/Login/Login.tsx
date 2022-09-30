@@ -9,14 +9,13 @@ import Link from "@mui/material/Link";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+import { BsShieldLockFill } from "react-icons/bs";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../firebase/firebase-config";
 import { useForm, Controller } from "react-hook-form";
-import Background from "login-bg.jpeg";
+
 function Copyright(props: any) {
   return (
     <Typography
@@ -40,8 +39,7 @@ const theme = createTheme();
 export default function Login() {
   const navigate = useNavigate();
   const [error, setError] = React.useState("");
-  console.log("Landed on Login page");
-  const { control, reset, handleSubmit } = useForm();
+  const { control,handleSubmit,formState:{errors} } = useForm({mode:'onBlur',reValidateMode:'onChange'});
 
   const handleSubmission = async (data: any) => {
     signInWithEmailAndPassword(auth, data.email, data.password)
@@ -49,18 +47,27 @@ export default function Login() {
         navigate("/create-order");
         sessionStorage.setItem("Auth Token", res.user.refreshToken);
       })
-      .catch((error) =>
-        error.code === "auth/wrong-password"
-          ? setError("Invalid Credentials")
-          : setError(error.code)
+      .catch((error) =>{
+        
+        switch(error.code){
+          case 'auth/invalid-email':
+            setError('Invalid credentials');
+            break;
+          case 'auth/invalid-password':
+            setError('Invalid Credentials');
+            break;
+        }
+      }
+        
+        // setError(error?.errors?.errors[0])
       );
 
-    console.log(error);
+    
   };
-
+  
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
+      <CssBaseline /> 
       <Box display="flex" flexDirection="row" width="100%" minHeight="80vh">
         <Box
           display="flex"
@@ -78,13 +85,12 @@ export default function Login() {
         <Box
           display="flex"
           width="50%"
-          
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+          <Avatar sx={{ m: 1, bgcolor: "black" }}>
+            <BsShieldLockFill />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
@@ -100,11 +106,15 @@ export default function Login() {
                     fullWidth
                     id="email"
                     label="Email Address"
+                    error={!!errors.email}
                     {...field}
                   />
                 )}
-                rules={{ required: true }}
+                rules={{ required: true, minLength:3 }}
               />
+              {/* <Typography variant="inherit" color="red">
+                {errors.email?.message}
+              </Typography> */}
             </Box>
             <Controller
               control={control}
@@ -113,24 +123,36 @@ export default function Login() {
               render={({ field }) => (
                 <TextField
                   fullWidth
+                  error={!!errors.password}
                   label="Password"
                   type="password"
                   id="password"
                   {...field}
                 />
               )}
-              rules={{ required: true }}
+              rules={{ required: true, minLength:4 }}
             />
-            <p style={{ color: "red", fontWeight: "500" }}>{error}</p>
+
+
+            
+            
+            {errors.password && <Typography style={{ color: "red", fontWeight: "500" }}>{errors.password.message}</Typography>}
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
+            {error && <Typography variant="inherit" color="red">{error}</Typography>}
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{
+                mt: 3,
+                mb: 2,
+                backgroundColor: "black",
+                fontWeight: "bold",
+                borderRadius: "8px",
+              }}
               onClick={handleSubmit(handleSubmission)}
             >
               Sign In
