@@ -175,6 +175,7 @@ export default function CustomizedSteppers() {
   // console.log("CurrentStep: ", currentStep);
 
   const onSubmit = async(data: any) => {
+    
     addDoc(collection(db,"orders"),{
       orderWeight:data.orderWeight,
       materialType:data.materialType,
@@ -182,7 +183,8 @@ export default function CustomizedSteppers() {
       area:data.area,
       address:data.address,
       companyName:data.companyName,
-      city:data.city
+      city:data.city,
+      date: new Date(),
 
     }).then((res)=>console.log(res))
     .catch((err)=>console.log(err));
@@ -245,8 +247,9 @@ export default function CustomizedSteppers() {
             )}
             {currentStep < steps.length - 2 && (
               <Button
-                sx={{ width: "100px" }}
+                sx={{ width: "100px", fontWeight:'bold' }}
                 variant="contained"
+                
                 color="info"
                 onClick={() => {
                   NextStep(currentStep);

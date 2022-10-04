@@ -7,7 +7,7 @@ import {useFormContext} from 'react-hook-form';
 const FormSummary = () => {
   const formState = useFormContext();
   const values = formState.control._formValues
-  console.log("Summary: ",formState.control._formValues);
+  // console.log("Summary: ",formState.control._formValues);
   return (
     <>
     <Box display="flex" flexDirection="column" marginBottom="12px" width="100%" justifyContent="center" alignItems="center">
